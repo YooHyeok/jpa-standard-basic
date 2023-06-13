@@ -16,7 +16,7 @@ public class Member {
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
-    @ManyToOne //Member 입장에서 M Team입장에서 1이다
+    @ManyToOne//Member 입장에서 M Team입장에서 1이다
     @JoinColumn(name = "TEAM_ID") // TEAM 엔터티의 PK TEAM_ID를 기준으로 조인 (Member엔터티에 TEAM_ID 외래키가 생성)
     private Team team;
 

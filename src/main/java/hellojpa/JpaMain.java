@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -40,9 +41,13 @@ public class JpaMain {
             em.clear(); // 1차캐시 초기화
 
             Member findMember = em.find(Member.class, member.getId());
-            Team findTeam = findMember.getTeam();
-
+            List<Member> members = findMember.getTeam().getMembers(); //team.getMembers();
             System.out.println(findMember);
+            members.add(member);
+            System.out.println(findMember);
+
+            System.out.println(members);
+
 
             tx.commit();
         } catch (Exception e) {
