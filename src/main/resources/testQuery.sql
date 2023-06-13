@@ -1,3 +1,3 @@
- select * from member
+ select * from member;
 
-select * from team
+select * from team;

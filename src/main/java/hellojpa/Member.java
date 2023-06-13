@@ -20,6 +20,17 @@ public class Member {
     @JoinColumn(name = "TEAM_ID") // TEAM 엔터티의 PK TEAM_ID를 기준으로 조인 (Member엔터티에 TEAM_ID 외래키가 생성)
     private Team team;
 
+    /**
+     * 연관관계 편의 메소드<br/>
+     * setTeam() Custom <br/>
+     * Member의 team 객체 세팅 뿐만 아니라 Team의 memberList 객체도 세팅한다.
+     * @param team
+     */
+    public void addTeamAndMember(Team team) {
+        this.team = team;
+        team.getMemberList().add(this);
+    }
+
     public Team getTeam() {
         return team;
     }
