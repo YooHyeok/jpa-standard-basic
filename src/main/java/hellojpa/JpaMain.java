@@ -25,28 +25,24 @@ public class JpaMain {
 
         //Try Catch 안에서 트랜잭션의 예외를 처리해야 한다.
         try {
-            /* 1. INSERT */
-//            Member member = new Member();
-//            member.setId(1L);
-//            member.setName("HelloA");
-//            em.persist(member); // Member가 저장된다.
 
-            /* 2-1 . SELECT */
-            Member findMember = em.find(Member.class, 1L);//Member 조회
-            System.out.println("findMember.getId() = " + findMember.getId());
-            System.out.println("findMember.getName() = " + findMember.getName());
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            /* 2-2 UPDATE */
-            findMember.setName("HelloJPA");
-            /**
-             * em.persist 하지 않아도 수정이된다. (자바 컬렉션을 다루는것과 유사)
-             * JPA를 통해서 Entity를 가져오는 순간부터 JPA가 관리하게된다.
-             * (JPA가 Transaction이 Commit하는 시점에 변경내용을 체크한다.)
-             * 트랜잭션이 Commit 하는 시점에 Commit 직전에 변경된 내용을 확인하고 엔티티에 변경된 내용이 있을 경우 UpdateQuery를 날린다음 Commit이된다.
-             */
+            Member member = new Member();
+            member.setUsername("mebmer1");
+            member.setTeam(team);
 
-            /* 2-3 DELETE */
-//            em.remove(findMember);
+            em.persist(member);
+
+            em.flush(); // 쓰기지연저장소 쿼리 호출
+            em.clear(); // 1차캐시 초기화
+
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = findMember.getTeam();
+
+            System.out.println(findMember);
 
             tx.commit();
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package jpabook.jpashop;
 
 import hellojpa.Member;
+import jpabook.jpashop.domain.Order;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,6 +23,7 @@ public class JpaShopMain {
          * DB Connection을 얻어 Query를 날리고 종료되는 한 일괄적인 단위의 활동을 할때 만들어줘야한다.
          */
         EntityTransaction tx = em.getTransaction();
+
         tx.begin();
 
         //Try Catch 안에서 트랜잭션의 예외를 처리해야 한다.
