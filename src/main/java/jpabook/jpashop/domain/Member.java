@@ -1,8 +1,10 @@
 package jpabook.jpashop.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-//@Entity
+@Entity
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
