@@ -19,6 +19,10 @@ public class Member {
     @Column
     private String zipcode;
 
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<>();
+
+
     public Long getId() {
         return id;
     }

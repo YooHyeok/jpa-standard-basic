@@ -17,10 +17,27 @@ public class Order {
     @Enumerated(EnumType.STRING) //EnumType은 @Enumerated를 선언해준다.
     private OrderStatus status;
 
-    /** MEMBER_ID(FK) 기준 연관관계 객체 매핑 */
+    /** MEMBER_ID(FK) 기준 연관관계 객체 매핑 (객체 연관 관계를 끊는걸 추천)*/
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    /** 연관관계 편의 메소드 (setter) OrderItems와 OrderItem을 세팅한다. */
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
 
     public Member getMember() {
         return member;
