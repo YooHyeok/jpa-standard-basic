@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>jpashop</groupId>
-    <artifactId>jpabook</artifactId>
+    <artifactId>jpashop</artifactId>
     <version>1.0.0</version>
 
     <dependencies>
