@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "ORDERS")
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +25,7 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    /** 연관관계 편의 메소드 (setter) OrderItems와 OrderItem을 세팅한다. */
+    /** 연관관계 편의 메소드 (setter) OrderItems와 OrderI을 세팅한다. */
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
