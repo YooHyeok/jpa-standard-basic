@@ -1,8 +1,10 @@
 package jpabook.jpashop.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-//@Entity
+@Entity
 public class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,4 +16,8 @@ public class Item {
     private int price;
     @Column
     private int stockQuantity;
+
+    @ManyToMany(mappedBy = "itemList")
+    private List<Category> categoryList = new ArrayList<>();
+
 }

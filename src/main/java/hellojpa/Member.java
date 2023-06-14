@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity //JPA 첫로딩시 Entity로 관리할수 있도록 인식
+//@Entity //JPA 첫로딩시 Entity로 관리할수 있도록 인식
 //@Table(name = "USER") // DB에 Member라는 이름이 아닌 User라는 이름의 테이블을 설정한다면 해당 어노테이션으로 지정한다. 생략시 엔티티 클래스명으로 테이블이 관리됨.
 public class Member {
 
