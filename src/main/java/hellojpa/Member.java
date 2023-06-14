@@ -20,10 +20,14 @@ public class Member {
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
 
+    /** (M:N) -> (M:1 + 1:M) MemberProduct 중간테이블 양방향 매핑 */
+    @OneToMany(mappedBy = "member") // MemberProduct 중간테이블과 매핑
+    private List<MemberProduct> memberProductList = new ArrayList<>();
+
     /** M:N 연관관계 Product 엔터티의 PRODUCT_ID와 매핑된다. */
-    @ManyToMany
-    @JoinTable(name = "MEMBER_PRODUCT")
-    private List<Product> productList = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "MEMBER_PRODUCT")
+//    private List<Product> productList = new ArrayList<>();
 
     @ManyToOne//Member 입장에서 M Team입장에서 1이다
     @JoinColumn(name = "TEAM_ID") // TEAM 엔터티의 PK TEAM_ID를 기준으로 조인 (Member엔터티에 TEAM_ID 외래키가 생성)
