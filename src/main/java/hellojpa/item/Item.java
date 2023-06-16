@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // 부모 item 자식 album, movie, book 테이블이 각각 정규화된다.
 @DiscriminatorColumn(name = "DIS_TYPE") // 기본 컬럼명은 Dtype이지만 name 속성으로 컬럼명을 지정할 수 있다.
-public abstract class Item {
+public class Item {
 //public class Item {
 
     @Id @GeneratedValue
