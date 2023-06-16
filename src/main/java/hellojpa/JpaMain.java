@@ -1,5 +1,7 @@
 package hellojpa;
 
+import hellojpa.item.Movie;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -26,29 +28,18 @@ public class JpaMain {
 
         //Try Catch 안에서 트랜잭션의 예외를 처리해야 한다.
         try {
+            Movie movie = new Movie();
+            movie.setDirector("aaaa");
+            movie.setActor("bbb");
+            movie.setName("바람과 함게 사라지다");
+            movie.setPrice(10000);
+            em.persist(movie);
 
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
+            em.flush();
+            em.clear();
 
-            Member member = new Member();
-            member.setUsername("mebmer1");
-            member.addTeamAndMember(team);
-            em.persist(member);
-
-
-            em.flush(); // 쓰기지연저장소 쿼리 호출
-            em.clear(); // 1차캐시 초기화
-
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMemberList();
-            System.out.println(findTeam);
-            for (Member m : members) {
-                System.out.println(m.getUsername());
-            }
-
-
-
+            Movie findMovie = em.find(Movie.class, movie.getId());
+            System.out.println("findMovie = " + findMovie);
 
 
             tx.commit();

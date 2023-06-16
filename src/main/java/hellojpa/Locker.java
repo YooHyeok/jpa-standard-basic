@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 1:1 연관관계 예시 엔터티 (Member 엔터티의 Locker와 매핑된다.)
  */
-//@Entity
+@Entity
 public class Locker {
 
     @Id

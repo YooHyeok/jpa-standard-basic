@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+//@Entity
 public class Category {
 
     @Id @GeneratedValue
@@ -23,7 +23,7 @@ public class Category {
      *  joinColumns와 inverseJoinColumns 옵션
      *  다이어그램 상 CATEGORY_ITEM 테이블은 먼저,
      *  CATEGORY 테이블을 기준으로 외래키를 갖게되고
-     *  반대 방향 엔터티로 ITEM 테이블을 가지므로 순서는 아래와 같다.
+     *  반대 방향 엔터티로 ITEM 테이블을 가지므로 순서는 아f래와 같다.
      *
      * */
     @ManyToMany

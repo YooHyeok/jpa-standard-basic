@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * M:N 연관관계 예시 엔터티 (Member 엔터티의 productList와 매핑)
  */
-//@Entity
+@Entity
 public class Product {
 
     @Id @GeneratedValue

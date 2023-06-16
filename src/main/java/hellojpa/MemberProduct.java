@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 /**
  * M:N 연관관계에서 (M:1/1:M)으로 분리할 중간 테이블 엔터티 승격
  */
-//@Entity
+@Entity
 public class MemberProduct {
 
     @Id @GeneratedValue
