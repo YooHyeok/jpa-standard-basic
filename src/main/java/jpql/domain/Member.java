@@ -8,7 +8,7 @@ public class Member {
     @Id @GeneratedValue
     private Long id;
     private String username;
-    private int age;
+    private Integer age;
 
     /* Team엔티티 다대일 연관관계 매핑 (fk : team_id)*/
     @ManyToOne(fetch = FetchType.LAZY)

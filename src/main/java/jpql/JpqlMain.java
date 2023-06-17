@@ -19,6 +19,8 @@ public class JpqlMain {
 //            pagingStatement(em); // 페이징 문법
 //            joinStatement(em); // Join 문법
 
+            subQueryStatement(em);
+
             tx.commit();
         } catch (Exception e) {
             System.out.println(e);
@@ -27,6 +29,57 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    /** subQuery 문법 <br/> JQPL과 QueryDSL에서 InlineView는 불가능 <br/> -> 가급적 Join으로 해결 or 쿼리 2번 or nativeQuery
+     * <br/> 일반적으로 인라인뷰를 사용하는 이유중 하나는 데이터를 가져온 뒤 내부에서 데이터를 축소하고 외부에서는 데이터타입을 변경하는 경우<br/>
+     * 혹은 SQL 에서 view에 대한 로직에 대해서 (view가 원하는 문자를 바꾸거나) 할때가 대부분 -> Application에서 처리해야한다. */
+    private static void subQueryStatement(EntityManager em) {
+        // teamA 소속인 회원
+        Team team = new Team();
+        team.setName("teamA");
+        em.persist(team);
+        Member member = new Member();
+        member.setUsername("teamA");
+        member.setAge(10);
+        member.setTeam(team);
+        em.persist(member);
+        em.flush();
+        em.clear();
+        List subQuery1 = em.createQuery("select m from Member m where exists (select t from m.team t where t.name = 'teamA')")
+                .getResultList();
+        em.clear();
+        System.out.println("subQuery1 = " + subQuery1);
+
+        // 전체 상품 각각의 재고보다 주문량이 많은 주문들
+        Product product = new Product();
+        product.setPrice(1000);
+        product.setStockAmount(10);
+        product.setName("상폼A");
+        em.persist(product);
+        Order order = new Order();
+        order.setProduct(product);
+        order.setAddress(new Address("경기도 땡땡", "땡땡동", "00000"));
+        order.setOrderAmount(2000);
+        em.persist(order);
+        em.flush();
+        em.clear();
+        List subQuery2 = em.createQuery("select o from Order o where o.orderAmount > all (select p.stockAmount from Product p)")
+                .getResultList();
+        System.out.println("subQuery2 = " + subQuery2);
+        em.clear();
+
+        // 어떤 팀이든 팀에 소속된 회원
+        List subQuery3 = em.createQuery("select m from Member m where m.team = any (select t from Team t)")
+                .getResultList();
+        System.out.println("subQuery3 = " + subQuery3);
+        em.clear();
+
+        // 스칼라 SubQuery (ex: avg와 같이 결과값이 double인 경우 타입명기를 Double.class로 지정)
+        List<Double> scarlaSubQuery = em.createQuery("select (select avg(m2) from Member m2) from Member m join Team t on m.username = t.name", Double.class)
+                .getResultList();
+        System.out.println("scarlaSubQuery = " + scarlaSubQuery);
+        em.clear();
     }
 
     /** Join 구문 메소드 */
@@ -62,6 +115,7 @@ public class JpqlMain {
         List<Member> leftJoinOnResult2 = em.createQuery("select m from Member m left join Team t on m.username = t.name", Member.class)
                 .getResultList();
         System.out.println("leftJoinOnResult2 = " + leftJoinOnResult2);
+        em.clear();
     }
 
     /** 페이징 처리 <br/> setFirstResult(offset) : 조회 시작 위치 <br/>(offset생략시 0 - offset 1이면 2번째 로우부터 시작) <br/> setMaxResults(limit) :  총 반환할 row갯수 */
@@ -83,6 +137,7 @@ public class JpqlMain {
         for (Member memberResult : result) {
             System.out.println("memberResult = " + memberResult);
         }
+        em.clear();
     }
 
 
@@ -117,16 +172,10 @@ public class JpqlMain {
         Product product = new Product();
         product.setName("제발되라");
         em.persist(product);
-
-        Address address = new Address();
-        address.setCity("경기도 땡땡");
-        address.setStreet("땡땡동");
-        address.setZipcode("00000");
-
         Order order = new Order();
         order.setOrderAmount(0);
         order.setProduct(product);
-        order.setAddress(address);
+        order.setAddress(new Address("경기도 땡땡", "땡땡동", "00000"));
 
         em.persist(order);
         em.flush();
@@ -178,6 +227,7 @@ public class JpqlMain {
         System.out.println("resultList2 = " + resultList2);
         System.out.println("resultList3 = " + resultList3);
 
+
         /** 단건 조회 */
         TypedQuery<Member> query4 = em.createQuery("select m from Member m where username = 'member1'", Member.class);
         //getSingleResult()는 결과가 단건, 단일객체 반환 -> 결과가 없으면 NoResultException / 둘 이상이면 NonUniqueResultException 발생
@@ -202,6 +252,7 @@ public class JpqlMain {
                 .setParameter(1, "member1")
                 .getSingleResult();
         System.out.println("메소드 체이닝 결과 = " + member2);
+        em.clear();
 
 
     }
