@@ -7,6 +7,7 @@ import jpql.domain.*;
 import jpql.dto.MemberDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JpqlMain {
@@ -22,9 +23,9 @@ public class JpqlMain {
 //            joinStatement(em); // Join 문법
 //            subQueryStatement(em); // subQuery 문법
 //            typeExpressionOrEtcStatement(em); // JPQL 타입 표현 - 문자, Boolean, Enum
-            conditionStatement(em); // JPQL 조건문 - case(search/simple), coalesce, nullif (nvl과 isnull은 지원안함)
+//            conditionStatement(em); // JPQL 조건문 - case(search/simple), coalesce, nullif (nvl과 isnull은 지원안함)
 
-
+            functions(em);
             tx.commit();
         } catch (Exception e) {
             System.out.println(e);
@@ -33,6 +34,90 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    /** JPQL 기본함수 & 사용자 정의 함수 (concat, ||, locate, size, index, userFunction)<br/> 사용자 정의 함수는 사용 전 방언에 추가해야한다. - 사용하는 DB 방언을 상속받고, 사용자 정의 함수를 등록한다. */
+    private static void functions(EntityManager em) {
+        em.persist(new Member());
+        em.flush();
+        em.clear();
+
+        // concat() : 문자열 합 연산
+        List<String> concatResult = em.createQuery("select concat('a', 'b') from Member m", String.class).getResultList();
+        for (String s : concatResult) {
+            System.out.println("s = " + s);
+        }
+        em.clear();
+
+        // || 연산 : 문자열 합 연산
+        List<String> orConcatResult = em.createQuery("select 'a' || 'b' from Member m", String.class).getResultList();
+        for (String s : orConcatResult) {
+            System.out.println("s = " + s);
+        }
+        em.clear();
+
+        // locate() : 문자열 위치 검색
+        List<Integer> locateResult = em.createQuery("select locate('de', 'abcdef') from Member m", Integer.class).getResultList();
+        for (Integer s : locateResult) {
+            System.out.println("s = " + s);
+        }
+        em.clear();
+
+        Team team = new Team();
+        team.setName("teamA");
+        em.persist(team); //영속화
+
+        Member memberA = new Member();
+        memberA.setTeam(team); //캐시에 있는 Team에 MemberC 추가
+        em.persist(memberA);
+        Member memberB = new Member();
+        memberB.setTeam(team); //캐시에 있는 Team에 MemberC 추가
+        em.persist(memberB);
+        Member memberC = new Member();
+        memberC.setTeam(team); //캐시에 있는 Team에 MemberC 추가
+        em.persist(memberC);
+
+        em.flush();
+        em.clear();
+
+        // size() : 해당 엔티티에 대한 컬렉션 크기를 반환해준다.
+        List<Integer> sizeResult = em.createQuery("select size(t.memberList) from Team t", Integer.class).getResultList();
+        for (Integer s : sizeResult) {
+            System.out.println("s = " + s);
+        }
+        em.clear();
+
+        // index() : 해당 엔티티의 컬럼 @OrderColumn 컬렉션을 위치값을 쓸때 함께 사용이 가능하다. 왠만해서는 사용하지 않는다. (List의 값타입 컬렉션에서 옵션을 줄때 사용)
+        /*List<Object[]> indexResult = em.createQuery("select index(3) from Team t").getResultList();
+        for (Object s : indexResult) {
+            System.out.println("s = " + s);
+        }*/
+
+        // 사용자 정의 함수 : MyH2Dialect클래스에 방언 등록 후 persistence.xml에서 hibernate.dialect를 해당 클래스로 변경(클래스 풀패키지 명기)
+        Member member = new Member();
+        member.setUsername("teamA");
+        em.persist(member);
+        Member member2 = new Member();
+        member2.setUsername("teamB");
+        em.persist(member2);
+        Member member3 = new Member();
+        member3.setUsername("teamC");
+        em.persist(member3);
+        em.flush();
+        em.clear();
+
+        List<String> functionResult = em.createQuery("select function('group_concat', m.username) from Member m", String.class).getResultList();
+        for (String s : functionResult) {
+            System.out.println("s = " + s);
+        }
+        em.clear();
+
+        // JPA Hibernate사용시 함수명으로 입력할 수 있다.
+        List<String> functionResult2 = em.createQuery("select group_concat(m.username) from Member m", String.class).getResultList();
+        for (String s : functionResult2) {
+            System.out.println("s = " + s);
+        }
+        em.clear();
     }
 
     /** case문(search/simple), coalesce, nullif (nvl과 isnull은 지원안함) */

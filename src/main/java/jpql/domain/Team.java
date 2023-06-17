@@ -41,4 +41,13 @@ public class Team {
     public void setMemberList(List<Member> memberList) {
         this.memberList = memberList;
     }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", memberList=" + memberList +
+                '}';
+    }
 }
