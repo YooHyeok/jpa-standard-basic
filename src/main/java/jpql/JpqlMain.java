@@ -23,26 +23,7 @@ public class JpqlMain {
 //            subQueryStatement(em); // subQuery 문법
 //            typeExpressionOrEtcStatement(em); // JPQL 타입 표현 - 문자, Boolean, Enum
 
-            // IS NOT NULL, EXISTS, IN, AND, OR, NOT, =, >, >=, <, <=, <> BEETWEEN, LIKE 등
-            List<Object[]> typeExpressionQuery3 = em.createQuery("select m.username, 'HELLO', true from Member m " +
-                            "where m.username is not null")
-                    .getResultList();
-            for (Object[] objects : typeExpressionQuery3) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[1] = " + objects[1]);
-                System.out.println("objects[2] = " + objects[2]);
-            }
-            em.clear();
 
-            // 엔티티타입(상속관계에서 사용) - type(i) : Item을 상속받은 엔티티 클래스명 혹은 DiscriminatorValue값 (persistence.xml에 엔티티 지정하지 않아 실행 안됨)
-            /*Book book = new Book();
-            book.setName("JPA");
-            book.setAuthor("김영한");
-            em.persist(book);
-            em.flush();
-            List<Item> InheritanceResult = em.createQuery("select i from Item i where type(i) = Book ", Item.class).getResultList();
-            System.out.println("InheritanceResult = " + InheritanceResult);
-            em.clear();*/
 
             tx.commit();
         } catch (Exception e) {
@@ -83,6 +64,27 @@ public class JpqlMain {
             System.out.println("objects[2] = " + objects[2]);
         }
         em.clear();
+
+        // IS NOT NULL, EXISTS, IN, AND, OR, NOT, =, >, >=, <, <=, <> BEETWEEN, LIKE 등
+        List<Object[]> typeExpressionQuery3 = em.createQuery("select m.username, 'HELLO', true from Member m " +
+                        "where m.username is not null")
+                .getResultList();
+        for (Object[] objects : typeExpressionQuery3) {
+            System.out.println("objects[0] = " + objects[0]);
+            System.out.println("objects[1] = " + objects[1]);
+            System.out.println("objects[2] = " + objects[2]);
+        }
+        em.clear();
+
+        // 엔티티타입(상속관계에서 사용) - type(i) : Item을 상속받은 엔티티 클래스명 혹은 DiscriminatorValue값 (persistence.xml에 엔티티 지정하지 않아 실행 안됨)
+            /*Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영한");
+            em.persist(book);
+            em.flush();
+            List<Item> InheritanceResult = em.createQuery("select i from Item i where type(i) = Book ", Item.class).getResultList();
+            System.out.println("InheritanceResult = " + InheritanceResult);
+            em.clear();*/
     }
 
     /** subQuery 문법 <br/> JQPL과 QueryDSL에서 InlineView는 불가능 <br/> -> 가급적 Join으로 해결 or 쿼리 2번 or nativeQuery
