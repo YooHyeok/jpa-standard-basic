@@ -1,5 +1,6 @@
 package jpql.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -44,5 +45,15 @@ public class Product {
 
     public void setStockAmount(int stockAmount) {
         this.stockAmount = stockAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", stockAmount=" + stockAmount +
+                '}';
     }
 }

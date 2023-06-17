@@ -8,6 +8,7 @@
         <class>jpql.domain.Member</class>
         <class>jpql.domain.Team</class>
         <class>jpql.domain.Order</class>
+<!--        <class>jpql.domain.Address</class>-->
         <class>jpql.domain.Product</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

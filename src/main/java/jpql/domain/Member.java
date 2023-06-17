@@ -11,9 +11,15 @@ public class Member {
     private int age;
 
     /* Team엔티티 다대일 연관관계 매핑 (fk : team_id)*/
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     public Team team;
+
+    /** 연관관계 편의 메소드 <br/> team 초기화 및 memberList에 team추가 */
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMemberList().add(this);
+    }
 
     /* Getter & Setter */
     public Long getId() {
@@ -46,5 +52,14 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                '}';
     }
 }

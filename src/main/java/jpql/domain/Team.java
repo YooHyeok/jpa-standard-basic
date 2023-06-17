@@ -15,6 +15,8 @@ public class Team {
     @OneToMany(mappedBy = "team")
     public List<Member> memberList = new ArrayList<>();
 
+
+
     /* Getter & Setter*/
     public Long getId() {
         return id;

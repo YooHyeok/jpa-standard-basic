@@ -2,7 +2,8 @@ package jpql.domain;
 
 import javax.persistence.*;
 
-@Entity(name = "ORDERS")
+@Entity
+@Table(name = "ORDERS")
 public class Order {
     @Id @GeneratedValue
     private Long id;
@@ -45,5 +46,15 @@ public class Order {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderAmount=" + orderAmount +
+                ", address=" + address +
+                ", product=" + product +
+                '}';
     }
 }
