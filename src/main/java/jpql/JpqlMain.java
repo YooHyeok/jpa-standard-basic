@@ -20,35 +20,8 @@ public class JpqlMain {
 //            projectionStatement(em); // 프로젝션
 //            pagingStatement(em); // 페이징 문법
 //            joinStatement(em); // Join 문법
-//            subQueryStatement(em);
-            //JPQL 타입 표현 - 문자, Boolean, Enum
-            Member member = new Member();
-            member.setUsername("teamA");
-            member.setAge(10);
-            member.setType(MemberType.ADMIN);
-            em.persist(member);
-            em.flush();
-            em.clear();
-            List<Object[]> typeExpressionQuery = em.createQuery("select m.username, 'HELLO', true from Member m " +
-                            "where m.type = jpql.domain.MemberType.ADMIN") //Enum의 경우 풀패키지명을 포함해야한다.
-                    .getResultList();
-            for (Object[] objects : typeExpressionQuery) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[1] = " + objects[1]);
-                System.out.println("objects[2] = " + objects[2]);
-            }
-            em.clear();
-            // enum 파라미터 바인딩
-            List<Object[]> typeExpressionQuery2 = em.createQuery("select m.username, 'HELLO', true from Member m " +
-                            "where m.type = :adminType") //Enum의 경우 풀패키지명을 포함해야한다.
-                    .setParameter("adminType", member.getType())
-                    .getResultList();
-            for (Object[] objects : typeExpressionQuery) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[1] = " + objects[1]);
-                System.out.println("objects[2] = " + objects[2]);
-            }
-            em.clear();
+//            subQueryStatement(em); // subQuery 문법
+//            typeExpressionOrEtcStatement(em); // JPQL 타입 표현 - 문자, Boolean, Enum
 
             // IS NOT NULL, EXISTS, IN, AND, OR, NOT, =, >, >=, <, <=, <> BEETWEEN, LIKE 등
             List<Object[]> typeExpressionQuery3 = em.createQuery("select m.username, 'HELLO', true from Member m " +
@@ -79,6 +52,37 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    /** JPQL 타입 표현 - 문자, Boolean, Enum */
+    private static void typeExpressionOrEtcStatement(EntityManager em) {
+        Member member = new Member();
+        member.setUsername("teamA");
+        member.setAge(10);
+        member.setType(MemberType.ADMIN);
+        em.persist(member);
+        em.flush();
+        em.clear();
+        List<Object[]> typeExpressionQuery = em.createQuery("select m.username, 'HELLO', true from Member m " +
+                        "where m.type = jpql.domain.MemberType.ADMIN") //Enum의 경우 풀패키지명을 포함해야한다.
+                .getResultList();
+        for (Object[] objects : typeExpressionQuery) {
+            System.out.println("objects[0] = " + objects[0]);
+            System.out.println("objects[1] = " + objects[1]);
+            System.out.println("objects[2] = " + objects[2]);
+        }
+        em.clear();
+        // enum 파라미터 바인딩
+        List<Object[]> typeExpressionQuery2 = em.createQuery("select m.username, 'HELLO', true from Member m " +
+                        "where m.type = :adminType") //Enum의 경우 풀패키지명을 포함해야한다.
+                .setParameter("adminType", member.getType())
+                .getResultList();
+        for (Object[] objects : typeExpressionQuery) {
+            System.out.println("objects[0] = " + objects[0]);
+            System.out.println("objects[1] = " + objects[1]);
+            System.out.println("objects[2] = " + objects[2]);
+        }
+        em.clear();
     }
 
     /** subQuery 문법 <br/> JQPL과 QueryDSL에서 InlineView는 불가능 <br/> -> 가급적 Join으로 해결 or 쿼리 2번 or nativeQuery
