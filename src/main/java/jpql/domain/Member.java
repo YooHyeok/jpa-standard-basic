@@ -13,7 +13,10 @@ public class Member {
     /* Team엔티티 다대일 연관관계 매핑 (fk : team_id)*/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
-    public Team team;
+    private Team team;
+
+    @Enumerated(EnumType.STRING)
+    private MemberType type;
 
     /** 연관관계 편의 메소드 <br/> team 초기화 및 memberList에 team추가 */
     public void changeTeam(Team team) {
@@ -22,6 +25,15 @@ public class Member {
     }
 
     /* Getter & Setter */
+
+    public MemberType getType() {
+        return type;
+    }
+
+    public void setType(MemberType type) {
+        this.type = type;
+    }
+
     public Long getId() {
         return id;
     }

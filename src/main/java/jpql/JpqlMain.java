@@ -1,6 +1,8 @@
 package jpql;
 
 
+import hellojpa.item.Book;
+import jpabook.jpashop.domain.Item;
 import jpql.domain.*;
 import jpql.dto.MemberDTO;
 
@@ -18,8 +20,56 @@ public class JpqlMain {
 //            projectionStatement(em); // 프로젝션
 //            pagingStatement(em); // 페이징 문법
 //            joinStatement(em); // Join 문법
+//            subQueryStatement(em);
+            //JPQL 타입 표현 - 문자, Boolean, Enum
+            Member member = new Member();
+            member.setUsername("teamA");
+            member.setAge(10);
+            member.setType(MemberType.ADMIN);
+            em.persist(member);
+            em.flush();
+            em.clear();
+            List<Object[]> typeExpressionQuery = em.createQuery("select m.username, 'HELLO', true from Member m " +
+                            "where m.type = jpql.domain.MemberType.ADMIN") //Enum의 경우 풀패키지명을 포함해야한다.
+                    .getResultList();
+            for (Object[] objects : typeExpressionQuery) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
+            em.clear();
+            // enum 파라미터 바인딩
+            List<Object[]> typeExpressionQuery2 = em.createQuery("select m.username, 'HELLO', true from Member m " +
+                            "where m.type = :adminType") //Enum의 경우 풀패키지명을 포함해야한다.
+                    .setParameter("adminType", member.getType())
+                    .getResultList();
+            for (Object[] objects : typeExpressionQuery) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
+            em.clear();
 
-            subQueryStatement(em);
+            // IS NOT NULL, EXISTS, IN, AND, OR, NOT, =, >, >=, <, <=, <> BEETWEEN, LIKE 등
+            List<Object[]> typeExpressionQuery3 = em.createQuery("select m.username, 'HELLO', true from Member m " +
+                            "where m.username is not null")
+                    .getResultList();
+            for (Object[] objects : typeExpressionQuery3) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
+            em.clear();
+
+            // 엔티티타입(상속관계에서 사용) - type(i) : Item을 상속받은 엔티티 클래스명 혹은 DiscriminatorValue값 (persistence.xml에 엔티티 지정하지 않아 실행 안됨)
+            /*Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영한");
+            em.persist(book);
+            em.flush();
+            List<Item> InheritanceResult = em.createQuery("select i from Item i where type(i) = Book ", Item.class).getResultList();
+            System.out.println("InheritanceResult = " + InheritanceResult);
+            em.clear();*/
 
             tx.commit();
         } catch (Exception e) {
