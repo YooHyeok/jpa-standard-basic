@@ -10,7 +10,7 @@ import javax.persistence.Persistence;
 
 public class JpaShopMain {
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("expractice");
 
         EntityManager em = emf.createEntityManager();
 
