@@ -8,9 +8,10 @@ import java.util.List;
 public class Team {
     @Id @GeneratedValue
     @Column(name = "TEAM_ID")
-    public Long id;
-    public String name;
+    private Long id;
+    private String name;
 
+    /* Member엔티티 일대다 양방향 연관관계 매핑 (fk : team_id)*/
     @OneToMany(mappedBy = "team")
     public List<Member> memberList = new ArrayList<>();
 
@@ -29,5 +30,13 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Member> getMemberList() {
+        return memberList;
+    }
+
+    public void setMemberList(List<Member> memberList) {
+        this.memberList = memberList;
     }
 }

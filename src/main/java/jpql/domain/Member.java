@@ -6,10 +6,11 @@ import javax.persistence.*;
 public class Member {
 
     @Id @GeneratedValue
-    public Long id;
-    public String username;
-    public int age;
+    private Long id;
+    private String username;
+    private int age;
 
+    /* Team엔티티 다대일 연관관계 매핑 (fk : team_id)*/
     @ManyToOne
     @JoinColumn(name = "TEAM_ID")
     public Team team;
@@ -37,5 +38,13 @@ public class Member {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }
