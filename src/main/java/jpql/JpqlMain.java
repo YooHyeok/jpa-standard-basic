@@ -22,7 +22,7 @@ public class JpqlMain {
 //            joinStatement(em); // Join 문법
 //            subQueryStatement(em); // subQuery 문법
 //            typeExpressionOrEtcStatement(em); // JPQL 타입 표현 - 문자, Boolean, Enum
-
+            conditionStatement(em); // JPQL 조건문 - case(search/simple), coalesce, nullif (nvl과 isnull은 지원안함)
 
 
             tx.commit();
@@ -33,6 +33,56 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    /** case문(search/simple), coalesce, nullif (nvl과 isnull은 지원안함) */
+    private static void conditionStatement(EntityManager em) {
+        // searchCase
+        Member member = new Member();
+        member.setUsername("teamA");
+        member.setAge(10);
+        member.setType(MemberType.ADMIN);
+        em.persist(member);
+        em.flush();
+        em.clear();
+        List<String> simpleCaseResult = em.createQuery("select case when m.age <= 10 then '학생요금' when m.age >= 60 then '경로요금' else '일반요금' end from Member m", String.class).getResultList();
+        System.out.println("simpleCaseResult = " + simpleCaseResult);
+        em.clear();
+
+        // simpleCase
+        Team team = new Team();
+        team.setName("teamA");
+        em.persist(team);
+        em.flush();
+        List<String> searchCaseResult = em.createQuery("select case t.name when 'teamA' then '인센티브110%' when 'teamB' then '인센티브120' else '인센티브105' end from Team t", String.class).getResultList();
+        System.out.println("searchCaseResult = " + searchCaseResult);
+        em.clear();
+
+        // coalesce - 사용자 이름이 없으면 이름 없는 회원을 반환
+        Member member2 = new Member();
+        member2.setUsername(null);
+        em.persist(member2);
+        em.flush();
+        em.clear();
+        List<String> coalesceResult = em.createQuery("select coalesce(m.username, '이름 없는 회원') from Member m", String.class)
+                .getResultList();
+        for (String s : coalesceResult) {
+            System.out.println("coalesceResult = " + s);
+        }
+        em.clear();
+
+        Member member3 = new Member();
+        member3.setUsername("관리자");
+        em.persist(member3);
+        em.flush();
+        em.clear();
+        // nullIf - 사용자 이름이 '관리자'면 null을 반환하고 나머지는 본인의 이름을 반환
+        List<String> nullIfResult = em.createQuery("select nullif(m.username, '관리자') from Member m", String.class)
+                .getResultList();
+        for (String s : nullIfResult) {
+            System.out.println("nullIfResult = " + s);
+        }
+        em.clear();
     }
 
     /** JPQL 타입 표현 - 문자, Boolean, Enum */
