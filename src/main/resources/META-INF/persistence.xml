@@ -19,6 +19,8 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/jpqlbasic"/>
 <!--            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>-->
             <property name="hibernate.dialect" value="jpql.dialect.MyH2Dialect"/>
+<!--            <property name="hibernate.jdbc.batch_size" value="100"/> --> <!-- 일반적인 batch -->
+            <property name="hibernate.jdbc.default_batch_fetch_size" value="100"/> <!-- fetch join에서의 batch Global 설정 ( @OneToMany 연관관계 컬렉션값 타입에 @BachSize(size = 100) 지정한 것과 같음. )-->
 
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true"/>

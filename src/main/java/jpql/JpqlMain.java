@@ -36,8 +36,7 @@ public class JpqlMain {
 //            lv1.functions(em);
 
 //            pathExpression(em); // 경로 표현식
-
-//            fetchJoin(em);
+            fetchJoin(em); // fetch Join
 
             tx.commit();
         } catch (Exception e) {
@@ -76,10 +75,10 @@ public class JpqlMain {
         member3.setUsername("회원3");
         member3.setTeam(team2);
         em.persist(member3);
-        Member member4 = new Member();
+/*        Member member4 = new Member();
         member4.setUsername("회원4");
         member4.setTeam(null);
-        em.persist(member4);
+        em.persist(member4);*/
         em.flush();
         em.clear();
 
