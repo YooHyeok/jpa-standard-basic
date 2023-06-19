@@ -36,7 +36,8 @@ public class JpqlMain {
 //            lv1.functions(em);
 
 //            pathExpression(em); // 경로 표현식
-            fetchJoin(em); // fetch Join
+//            fetchJoin(em); // fetch Join
+            namedQuery(em);
 
             tx.commit();
         } catch (Exception e) {
@@ -46,6 +47,38 @@ public class JpqlMain {
             em.close();
         }
         emf.close();
+    }
+
+    /**
+     * NamedQuery 엔티티 클래스에 @NamedQuery어노테이션을 선언한다<br/>
+     * @NamedQuery(name = '' , query = '')<br/>
+     * persistence.xml에 <mapping-file>META-INF/ormMember.xml</mapping-file> 선언 <br/>
+     * <provider></provider> 태그 다음위치에 선언해야한다.<br/>
+     * XML이 항상 우선권을 가진다.<br/>
+     */
+    private static void namedQuery(EntityManager em) {
+        Member member = new Member();
+        member.setUsername("memberA");
+        member.setAge(32);
+        member.setType(MemberType.ADMIN);
+        em.persist(member);
+        em.flush();
+        em.clear();
+        Member findByUsername = em.createNamedQuery("Member.findByUsername", Member.class)
+                .setParameter("username", "memberA")
+                .getSingleResult();
+        System.out.println("findByUsername = " + findByUsername);
+        em.clear();
+        Member findByAge = em.createNamedQuery("Member.findByAge", Member.class)
+                .setParameter("age", 32)
+                .getSingleResult();
+        System.out.println("findByAge = " + findByAge);
+        em.clear();
+
+        Long singleResult = em.createNamedQuery("Member.count", Long.class)
+                .getSingleResult();
+        System.out.println("singleResult = " + singleResult);
+        em.clear();
     }
 
     /**
