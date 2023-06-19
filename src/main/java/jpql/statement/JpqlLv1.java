@@ -346,7 +346,7 @@ public class JpqlLv1 {
         em.flush();
         em.clear();
 
-        List<Address> result4 = em.createQuery("select o.address from Order o", Address.class)
+        List<Address> result4 = em.createQuery("select o.address from Orders o", Address.class)
                 .getResultList();
         System.out.println("임베디드 = " + result4);
         em.clear();
